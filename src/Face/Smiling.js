@@ -14,9 +14,12 @@ const Smiling = ({size}) => {
     strokeWidth : 2,
     r : null
   }
-  const width = size;
-  const height = width/1.45455;
-
+  var width = 1;
+  var height = 1;
+  if(size){
+    width = size;  
+    height = width/1.45455;
+  }
   const margin = height/6;
   const marginBottom = height/5;  
   

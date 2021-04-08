@@ -1,7 +1,8 @@
-import { path } from 'd3';
-const d3 = require('d3');
+import React, {useState} from 'react'
 
-const Eye = ({id,rx,ry,cx,cy,strokeWidth}) =>{
+const Eye = ({id,rx,ry,cx,cy,strokeWidth,setpos}) =>{
+  const [fl,setfl] = useState(1)
+  const [fl1,setfl1] = useState(1)
     return (
         <ellipse
           id={id}
@@ -12,6 +13,18 @@ const Eye = ({id,rx,ry,cx,cy,strokeWidth}) =>{
           fill="white"
           stroke="black"
           strokeWidth={strokeWidth}
+          ref={el=>{
+            if(!el || fl1 === 0) return
+            const rect = el.getBoundingClientRect() 
+            const c = {x : rect.width, y : rect.height, f : null}
+            if(id==="eyeL") c.f = 0 
+            else if(id==="eyeR") c.f = 1
+            if(fl===1){
+              setpos(c)
+              setfl1(0)
+              setfl(0)
+            } 
+          }}
       />
     )
     

@@ -13,7 +13,7 @@ class App extends Component {
   
   onChangeHandler = (e)=>{
       const number = e.target.value
-      if(number>0){
+      if(number>=0){
         this.setState({num : number})
       }
       else e.target.value = 0

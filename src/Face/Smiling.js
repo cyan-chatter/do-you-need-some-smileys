@@ -3,6 +3,8 @@ import Eye from './Eyes/Eye'
 import Eyeball from './Eyes/Eyeball'
 import Mouth from './Mouth/Mouth'
 
+import React, {useState} from 'react'
+
 const d3 = require('d3');
 const Smiling = ({size}) => {
 
@@ -44,9 +46,7 @@ const Smiling = ({size}) => {
     [face.r,0],
     [-face.r,-face.r/10]
   ]
-  ////
-
-
+  
   const eyeballRadius = face.r/10;
   const mouthWidth = face.strokeWidth*4;
   const mouthRadius = height/8 *1.5;
@@ -58,46 +58,76 @@ const Smiling = ({size}) => {
   
   
   const eyeL = {
-    cx : null,
-    cy : null,
+    cx : - eyeOffsetX,
+    cy : - eyeOffsetY,
     strokeWidth : face.strokeWidth*2,
     rx : eyeRadiusX,
     ry : eyeRadiusY
   }
 
   const eyeR = {
-    cx : null,
-    cy : null,
+    cx : + eyeOffsetX,
+    cy : - eyeOffsetY,
     strokeWidth : face.strokeWidth*2,
     rx : eyeRadiusX,
     ry : eyeRadiusY
   }
 
   const eyeBL = {
-    cx : null,
-    cy: null,
+    cx : - eyeOffsetX ,
+    cy: - eyeOffsetY + eyeballRadius,
     strokeWidth : face.strokeWidth*2,
     r : eyeballRadius
   }
 
   const eyeBR = {
-    cx : null,
-    cy: null,
+    cx : + eyeOffsetX,
+    cy: - eyeOffsetY + eyeballRadius,
     strokeWidth : face.strokeWidth*2,
     r : eyeballRadius
   }
 
+  const [LEpos,setLEpos] = useState({x : eyeL.cx, y: eyeL.cy})
+  const [REpos,setREpos] = useState({x : eyeR.cx, y: eyeR.cy})
 
-  eyeL.cx = - eyeOffsetX
-  eyeR.cx = + eyeOffsetX
-  eyeL.cy = eyeR.cy = - eyeOffsetY
-  eyeBL.cx =  - eyeOffsetX 
-  eyeBR.cx =  + eyeOffsetX 
-  eyeBL.cy = eyeBR.cy =  - eyeOffsetY + eyeballRadius
+  const [LEB,setLEyeball] = useState({x: eyeBL.cx , y : eyeBL.cy})
+  const [REB,setREyeball] = useState({x: eyeBR.cx , y : eyeBR.cy})
 
+  const setpos = (c) => {
+    if(c.f === 0)  setLEpos({x : c.x, y: c.y})
+    else if(c.f === 1) setREpos({x : c.x, y: c.y})
+  }
 
-  ///
+  const handleMouseMove = (event) => {
+    const clx = event.clientX
+    const cly = event.clientY
 
+    const phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
+    const phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+    
+    const rL = (eyeL.rx + eyeL.ry)/4
+    const rR = (eyeR.rx + eyeR.ry)/4
+
+    const pL = {
+      x : (rL * Math.sin(phiL) + eyeL.cx) ,
+      y : (rL * Math.cos(phiL) + eyeL.cy)
+    }
+    const pR = {
+      x : (rR * Math.sin(phiR) + eyeR.cx),
+      y : (rR * Math.cos(phiR) + eyeR.cy)
+    }
+
+    setLEyeball({x : pL.x, y: pL.y})    
+    setREyeball({x : pR.x, y: pR.y})
+
+  }
+
+  React.useEffect(()=>{
+    window.addEventListener('mousemove',handleMouseMove)
+    return ()=>{
+      window.removeEventListener('mousemove', handleMouseMove);
+    }
+  })
 
   return (
     <>
@@ -129,6 +159,7 @@ const Smiling = ({size}) => {
           fill="white"
           stroke="black"
           strokeWidth={eyeL.strokeWidth}
+          setpos={setpos}
       />
       <Eye
           id="eyeR"
@@ -139,17 +170,18 @@ const Smiling = ({size}) => {
           fill="white"
           stroke="black"
           strokeWidth={eyeR.strokeWidth}
+          setpos={setpos}
       />
       <Eyeball
           id="eyeBL"
-          cx = {eyeBL.cx}
-          cy = {eyeBL.cy}
+          cx = {LEB.x}
+          cy = {LEB.y}
           r = {eyeBL.r}
       />
       <Eyeball
           id="eyeBR"
-          cx = {eyeBR.cx}
-          cy = {eyeBR.cy}
+          cx = {REB.x}
+          cy = {REB.y}
           r = {eyeBR.r}
       />
       

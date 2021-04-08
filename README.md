@@ -1,4 +1,6 @@
-# The Project is based on SVG Smileys Generation 
+# Do You Need Some Smileys?
+
+## The Project is based on SVG Smileys Generation 
 
 ### Get as many Smileys as you like
 

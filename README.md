@@ -1,9 +1,8 @@
 # Do You Need Some Smileys?
 
-## The Project is based on SVG Smileys Generation 
+## Based on Drawing SVG on Web
 
 ### Get as many Smileys as you like
-
 
 ## Create React App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

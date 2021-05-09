@@ -7,4 +7,4 @@
 ## Create React App
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This is a simple experiment on creating SVG components with D3 Data Visualization Library and React.
+This is a simple experiment on creating SVG components in a React application.

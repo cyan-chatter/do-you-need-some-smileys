@@ -27,7 +27,7 @@ class App extends Component {
         <div className="App">
           <h1>DO YOU NEED SOME SMILEYS?</h1>
 
-          <h2>Take this many Smileys :</h2>
+          <h2>How many?</h2>
         <input type="number" value={this.state.num} onChange={this.onChangeHandler}></input>
         <div className="smileys">
           {arr.map((el)=>{

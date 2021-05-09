@@ -102,12 +102,41 @@ const Smiling = ({size}) => {
   }
 
   const handleMouseMove = (event) => {
-    const clx = event.clientX
+    const clx = event.clientX 
     const cly = event.clientY
 
-    const phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
-    const phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+    // const phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
+    // const phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
     
+    // const rL = (eyeL.rx + eyeL.ry)/4
+    // const rR = (eyeR.rx + eyeR.ry)/4
+
+    // const pL = {
+    //   x : (rL * Math.sin(phiL) + eyeL.cx) ,
+    //   y : (rL * Math.cos(phiL) + eyeL.cy)
+    // }
+    // const pR = {
+    //   x : (rR * Math.sin(phiR) + eyeR.cx),
+    //   y : (rR * Math.cos(phiR) + eyeR.cy)
+    // }
+
+    // setLEyeball({x : pL.x, y: pL.y})    
+    // setREyeball({x : pR.x, y: pR.y})
+
+    var snx = 1;
+    var sn = cly > (face.cy + face.r) 
+    if(!sn) snx = -1
+
+    var phiL, phiR;
+
+    if(sn){
+      phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
+      phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+    }
+    else{
+      phiL = Math.atan((clx - LEpos.x)/(cly + LEpos.y))
+      phiR = Math.atan((clx - REpos.x)/(cly + REpos.y))
+    }
     const rL = (eyeL.rx + eyeL.ry)/4
     const rR = (eyeR.rx + eyeR.ry)/4
 
@@ -120,10 +149,12 @@ const Smiling = ({size}) => {
       y : (rR * Math.cos(phiR) + eyeR.cy)
     }
 
+
     setLEyeball({x : pL.x, y: pL.y})    
     setREyeball({x : pR.x, y: pR.y})
 
-  }
+
+}
 
   React.useEffect(()=>{
     window.addEventListener('mousemove',handleMouseMove)
@@ -189,8 +220,6 @@ const Smiling = ({size}) => {
       />
       
       <Mouth mouthRadius={mouthRadius} mouthWidth={mouthWidth}/>
-
-
 
       <path 
         d={`M${-face.r/4 -beardAngleOffsetX},${face.r*0.97} 

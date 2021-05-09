@@ -93,20 +93,14 @@ const Smiling = ({size}) => {
   const [LEB,setLEyeball] = useState({x: eyeBL.cx , y : eyeBL.cy})
   const [REB,setREyeball] = useState({x: eyeBR.cx , y : eyeBR.cy})
 
-  const [EyeMoveX, setEyeMoveX] = useState(0)
-  const [EyeMoveY, setEyeMoveY] = useState(0)
-
   const setpos = (c) => {
     if(c.f === 0)  setLEpos({x : c.x, y: c.y})
     else if(c.f === 1) setREpos({x : c.x, y: c.y})
   }
 
   const handleMouseMove = (event) => {
-    // const clx = event.clientX
-    // const cly = event.clientY
-
-    // const clx = event.clientX 
-    // const cly = event.clientY 
+    const clx = event.clientX
+    const cly = event.clientY
 
     // const pL = {
     //   x : null,
@@ -171,44 +165,48 @@ const Smiling = ({size}) => {
 
     ///////////////////
     
+    var phiL, phiR, pL, pR;
     
-    // var snx = 1;
-    // var sn = cly > (face.cy + face.r) 
-    // if(!sn) snx = -1
+    const rL = (eyeL.rx + eyeL.ry)/4
+    const rR = (eyeR.rx + eyeR.ry)/4
 
-    // var phiL, phiR;
+    if(cly >= LEpos.y){
+      console.log("b runs")
+      phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
+      phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+      pL = {
+        x : (rL * Math.sin(phiL) + eyeL.cx),
+        y : (rL * Math.cos(phiL) + eyeL.cy)
+      }
+      pR = {
+        x : (rR * Math.sin(phiR) + eyeR.cx),
+        y : (rR * Math.cos(phiR) + eyeR.cy)
+      }
+    }
+    else{
+      console.log("a runs")
+      phiL = Math.atan((clx - LEpos.x)/(LEpos.y - cly))
+      phiR = Math.atan((clx - REpos.x)/(REpos.y - cly))
+      pL = {
+        x : (rL * Math.sin(phiL) + eyeL.cx),
+        y : (-rL * Math.cos(phiL) + eyeL.cy)
+      }
+      pR = {
+        x : (rR * Math.sin(phiR) + eyeR.cx),
+        y : (-rR * Math.cos(phiR) + eyeR.cy)
+      }
+    }
 
-    // if(sn){
-    //   phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
-    //   phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
-    // }
-    // else{
-    //   phiL = Math.atan((clx - LEpos.x)/(cly + LEpos.y))
-    //   phiR = Math.atan((clx - REpos.x)/(cly + REpos.y))
-    // }
-    // const rL = (eyeL.rx + eyeL.ry)/4
-    // const rR = (eyeR.rx + eyeR.ry)/4
-
-    // const pL = {
-    //   x : (snx * rL * Math.sin(phiL) + eyeL.cx) ,
-    //   y : (rL * Math.cos(phiL) + eyeL.cy)
-    // }
-    // const pR = {
-    //   x : (snx * rR * Math.sin(phiR) + eyeR.cx),
-    //   y : (rR * Math.cos(phiR) + eyeR.cy)
-    // }
-
-
-    // setLEyeball({x : pL.x, y: pL.y})    
-    // setREyeball({x : pR.x, y: pR.y})
+    setLEyeball({x : pL.x, y: pL.y})    
+    setREyeball({x : pR.x, y: pR.y})
 
     /////////////////
 
-    var x = event.clientX * 100 / window.innerWidth 
-    var y = event.clientY * 100 / window.innerHeight 
+    // var x = event.clientX * 100 / window.innerWidth 
+    // var y = event.clientY * 100 / window.innerHeight 
 
-    setEyeMoveX(x)
-    setEyeMoveY(y)
+    // setEyeMoveX(x)
+    // setEyeMoveY(y)
   }
 
   React.useEffect(()=>{
@@ -266,20 +264,21 @@ const Smiling = ({size}) => {
           cx = {LEB.x}
           cy = {LEB.y}
           r = {eyeBL.r}
-          style = {{left : EyeMoveX, top : EyeMoveY}}
+          
       />
       <Eyeball
           id="eyeBR"
           cx = {REB.x}
           cy = {REB.y}
           r = {eyeBR.r}
-          style = {{left : EyeMoveX, top : EyeMoveY}}
+          
       />
       
       <Mouth mouthRadius={mouthRadius} mouthWidth={mouthWidth}/>
 
       <path 
-        d={`M${-face.r/4 -beardAngleOffsetX},${face.r*0.97} 
+        d={`
+        M${-face.r/4 -beardAngleOffsetX},${face.r*0.97} 
         Q ${-face.r/60},${face.r*285/219} ${face.r/4-beardAngleOffsetX * 1.2},${face.r*0.97}
         L${face.r/4 -face.r/44 -beardAngleOffsetX},${face.r*0.94}
         C ${face.r/60},${face.r*217/219} ${-face.r/60},${face.r*210/219} ${-face.r/4 +face.r/44 + beardAngleOffsetX/2},${face.r*0.93}

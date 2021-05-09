@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Smiling from './Face/Smiling';
 import {React,Component} from 'react'

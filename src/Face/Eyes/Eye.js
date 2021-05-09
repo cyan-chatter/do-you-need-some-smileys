@@ -16,7 +16,8 @@ const Eye = ({id,rx,ry,cx,cy,strokeWidth,setpos}) =>{
           ref={el=>{
             if(!el || fl1 === 0) return
             const rect = el.getBoundingClientRect() 
-            const c = {x : rect.width, y : rect.height, f : null}
+            console.log("rect", rect)
+            const c = {x : rect.x, y : rect.y, f : null}
             if(id==="eyeL") c.f = 0 
             else if(id==="eyeR") c.f = 1
             if(fl===1){

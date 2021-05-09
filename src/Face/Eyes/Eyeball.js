@@ -1,5 +1,3 @@
-const d3 = require('d3');
-
 const Eyeball = ({id,cx,cy,r}) => {
     return (
       <circle

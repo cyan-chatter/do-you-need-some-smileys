@@ -1,11 +1,8 @@
-import { path } from 'd3';
 import Eye from './Eyes/Eye'
 import Eyeball from './Eyes/Eyeball'
 import Mouth from './Mouth/Mouth'
+import React, {useState, useRef} from 'react'
 
-import React, {useState} from 'react'
-
-const d3 = require('d3');
 const Smiling = ({size}) => {
 
   const face = {
@@ -96,33 +93,122 @@ const Smiling = ({size}) => {
   const [LEB,setLEyeball] = useState({x: eyeBL.cx , y : eyeBL.cy})
   const [REB,setREyeball] = useState({x: eyeBR.cx , y : eyeBR.cy})
 
+  const [EyeMoveX, setEyeMoveX] = useState(0)
+  const [EyeMoveY, setEyeMoveY] = useState(0)
+
   const setpos = (c) => {
     if(c.f === 0)  setLEpos({x : c.x, y: c.y})
     else if(c.f === 1) setREpos({x : c.x, y: c.y})
   }
 
   const handleMouseMove = (event) => {
-    const clx = event.clientX
-    const cly = event.clientY
+    // const clx = event.clientX
+    // const cly = event.clientY
 
-    const phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
-    const phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+    // const clx = event.clientX 
+    // const cly = event.clientY 
+
+    // const pL = {
+    //   x : null,
+    //   y : null
+    // }
+
+    // const pR = {
+    //   x : null,
+    //   y : null
+    // }
     
-    const rL = (eyeL.rx + eyeL.ry)/4
-    const rR = (eyeR.rx + eyeR.ry)/4
+    // const dxL = clx - LEB.x
+    // const dyL = cly - LEB.y
+    
+    // //Left x
+    // if(dxL < 0){
+    //   setLEyeball({...LEB, x : LEpos.x - eyeL.rx })  
+    // }
+    // else if(dxL > 0){
+    //   setLEyeball({...LEB, x : LEpos.x + eyeL.rx })
+    // }
+    // else{
+    //   setLEyeball({...LEB, x : LEpos.x})
+    // }
 
-    const pL = {
-      x : (rL * Math.sin(phiL) + eyeL.cx) ,
-      y : (rL * Math.cos(phiL) + eyeL.cy)
-    }
-    const pR = {
-      x : (rR * Math.sin(phiR) + eyeR.cx),
-      y : (rR * Math.cos(phiR) + eyeR.cy)
-    }
+    // //Left y
+    // if(dyL < 0){
+    //   setLEyeball({...LEB, y : LEpos.y - eyeL.ry })  
+    // }
+    // else if(dyL > 0){
+    //   setLEyeball({...LEB, y : LEpos.y + eyeL.ry })
+    // }
+    // else{
+    //   setLEyeball({...LEB, y : LEpos.y})
+    // }
+    
+    // const dxR = clx - REpos.x
+    // const dyR = cly - REpos.y
 
-    setLEyeball({x : pL.x, y: pL.y})    
-    setREyeball({x : pR.x, y: pR.y})
+    // //Right x
+    // if(dxR < 0){
+    //   setREyeball({...REB, x : REpos.x - eyeR.rx })  
+    // }
+    // else if(dxR > 0){
+    //   setREyeball({...REB, x : REpos.x + eyeR.rx })
+    // }
+    // else{
+    //   setREyeball({...REB, x : REpos.x})
+    // }
 
+    // //Right y
+    // if(dyR < 0){
+    //   setREyeball({...REB, y : REpos.y - eyeR.ry })  
+    // }
+    // else if(dyR > 0){
+    //   setREyeball({...REB, y : REpos.y + eyeR.ry })
+    // }
+    // else{
+    //   setREyeball({...REB, y : REpos.y})
+    // }
+    
+
+    ///////////////////
+    
+    
+    // var snx = 1;
+    // var sn = cly > (face.cy + face.r) 
+    // if(!sn) snx = -1
+
+    // var phiL, phiR;
+
+    // if(sn){
+    //   phiL = Math.atan((clx - LEpos.x)/(cly - LEpos.y))
+    //   phiR = Math.atan((clx - REpos.x)/(cly - REpos.y))
+    // }
+    // else{
+    //   phiL = Math.atan((clx - LEpos.x)/(cly + LEpos.y))
+    //   phiR = Math.atan((clx - REpos.x)/(cly + REpos.y))
+    // }
+    // const rL = (eyeL.rx + eyeL.ry)/4
+    // const rR = (eyeR.rx + eyeR.ry)/4
+
+    // const pL = {
+    //   x : (snx * rL * Math.sin(phiL) + eyeL.cx) ,
+    //   y : (rL * Math.cos(phiL) + eyeL.cy)
+    // }
+    // const pR = {
+    //   x : (snx * rR * Math.sin(phiR) + eyeR.cx),
+    //   y : (rR * Math.cos(phiR) + eyeR.cy)
+    // }
+
+
+    // setLEyeball({x : pL.x, y: pL.y})    
+    // setREyeball({x : pR.x, y: pR.y})
+
+    /////////////////
+
+    var x = event.clientX * 100 / window.innerWidth 
+    var y = event.clientY * 100 / window.innerHeight 
+
+    setEyeMoveX(x)
+    setEyeMoveY(y)
   }
 
   React.useEffect(()=>{
@@ -180,17 +266,17 @@ const Smiling = ({size}) => {
           cx = {LEB.x}
           cy = {LEB.y}
           r = {eyeBL.r}
+          style = {{left : EyeMoveX, top : EyeMoveY}}
       />
       <Eyeball
           id="eyeBR"
           cx = {REB.x}
           cy = {REB.y}
           r = {eyeBR.r}
+          style = {{left : EyeMoveX, top : EyeMoveY}}
       />
       
       <Mouth mouthRadius={mouthRadius} mouthWidth={mouthWidth}/>
-
-
 
       <path 
         d={`M${-face.r/4 -beardAngleOffsetX},${face.r*0.97} 
